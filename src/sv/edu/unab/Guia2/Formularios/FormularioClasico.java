@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 import java.math.*;
 
+import com.sun.xml.internal.messaging.saaj.util.FinalArrayList;
 import sv.edu.unab.Guia2.Dominio.Personal;
 
 public class FormularioClasico {
@@ -42,9 +43,10 @@ public class FormularioClasico {
     private JTextField txtParametro2;
     private JButton btnFiltroSexo;
     private JButton btnEliminarFiltros;
+    private JComboBox cboxFiltroSexo;
 
     ArrayList<Personal> listado=new ArrayList<>();
-    ArrayList<Personal> Filtrado=new ArrayList<>();
+    ArrayList<Personal> Filtrado=new ArrayList();
      String Codigo;
      String Nombre;
      String ApellidoPaterno;
@@ -159,6 +161,7 @@ public class FormularioClasico {
             public void actionPerformed(ActionEvent e) {
                 switch (cboxFiltros.getSelectedIndex()){
                     case 0:{//igual a
+                        Filtrado.clear();
                         for (int i=0;i<listado.size();i++){
                             String edad=String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
                             int edad1=Integer.valueOf(edad);
@@ -171,11 +174,12 @@ public class FormularioClasico {
                                 per.setTelefono(listado.get(i).getTelefono());
                                 per.setFechaNacimiento(listado.get(i).getFechaNacimiento());
                                 per.setSexo(listado.get(i).getSexo());
-                                Filtrado.clear();
+
                                 Filtrado.add(per);
-                                FiltroEdad();
+
                             }
                         }
+                        FiltroEdad();
                     }break;
                     case 1:{//mayor a
                         Filtrado.clear();
@@ -285,6 +289,11 @@ public class FormularioClasico {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Actualizar();
+            }
+        });
+        btnFiltroSexo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
             }
         });
     }
