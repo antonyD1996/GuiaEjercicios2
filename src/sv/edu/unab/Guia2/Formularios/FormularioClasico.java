@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.math.*;
 
 import sv.edu.unab.Guia2.Dominio.Personal;
 
@@ -38,6 +39,9 @@ public class FormularioClasico {
     private JComboBox cboxFiltros;
     private JTextField txtParametro;
     private JButton btnAplicarFiltro;
+    private JTextField txtParametro2;
+    private JButton btnFiltroSexo;
+    private JButton btnEliminarFiltros;
 
     ArrayList<Personal> listado=new ArrayList<>();
     ArrayList<Personal> Filtrado=new ArrayList<>();
@@ -153,10 +157,32 @@ public class FormularioClasico {
         btnAplicarFiltro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switch(cboxFiltros.getSelectedIndex()){
-                    case 0:{
+                switch (cboxFiltros.getSelectedIndex()){
+                    case 0:{//igual a
                         for (int i=0;i<listado.size();i++){
-                            if (txtParametro.getText().equals(listado.get(i).getFechaNacimiento().until(LocalDate.now(),ChronoUnit.YEARS))){
+                            String edad=String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
+                            int edad1=Integer.valueOf(edad);
+                            if (edad1==Integer.parseInt(txtParametro.getText())){
+                                Personal per=new Personal();
+                                per.setCodigo(listado.get(i).getCodigo());
+                                per.setNombre(listado.get(i).getNombre());
+                                per.setApellidoPaterno(listado.get(i).getApellidoPaterno());
+                                per.setApellidoMaterno(listado.get(i).getApellidoMaterno());
+                                per.setTelefono(listado.get(i).getTelefono());
+                                per.setFechaNacimiento(listado.get(i).getFechaNacimiento());
+                                per.setSexo(listado.get(i).getSexo());
+                                Filtrado.clear();
+                                Filtrado.add(per);
+                                FiltroEdad();
+                            }
+                        }
+                    }break;
+                    case 1:{//mayor a
+                        Filtrado.clear();
+                        for (int i=0;i<listado.size();i++){
+                            String edad=String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
+                            int edad1=Integer.valueOf(edad);
+                            if (edad1>Integer.valueOf(txtParametro.getText())){
                                 Personal per=new Personal();
                                 per.setCodigo(listado.get(i).getCodigo());
                                 per.setNombre(listado.get(i).getNombre());
@@ -167,9 +193,98 @@ public class FormularioClasico {
                                 per.setSexo(listado.get(i).getSexo());
                                 Filtrado.add(per);
                             }
+
                         }
+                        FiltroEdad();
+                    }break;
+                    case 2:{//mayor o igual a
+                        Filtrado.clear();
+                        for (int i=0;i<listado.size();i++){
+                            String edad=String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
+                            int edad1=Integer.valueOf(edad);
+                            if (edad1>=Integer.valueOf(txtParametro.getText())){
+                                Personal per=new Personal();
+                                per.setCodigo(listado.get(i).getCodigo());
+                                per.setNombre(listado.get(i).getNombre());
+                                per.setApellidoPaterno(listado.get(i).getApellidoPaterno());
+                                per.setApellidoMaterno(listado.get(i).getApellidoMaterno());
+                                per.setTelefono(listado.get(i).getTelefono());
+                                per.setFechaNacimiento(listado.get(i).getFechaNacimiento());
+                                per.setSexo(listado.get(i).getSexo());
+                                Filtrado.add(per);
+                            }
+
+                        }
+                        FiltroEdad();
+                    }break;
+                    case 3:{//menor a
+                        Filtrado.clear();
+                        for (int i=0;i<listado.size();i++){
+                            String edad=String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
+                            int edad1=Integer.valueOf(edad);
+                            if (edad1<Integer.valueOf(txtParametro.getText())){
+                                Personal per=new Personal();
+                                per.setCodigo(listado.get(i).getCodigo());
+                                per.setNombre(listado.get(i).getNombre());
+                                per.setApellidoPaterno(listado.get(i).getApellidoPaterno());
+                                per.setApellidoMaterno(listado.get(i).getApellidoMaterno());
+                                per.setTelefono(listado.get(i).getTelefono());
+                                per.setFechaNacimiento(listado.get(i).getFechaNacimiento());
+                                per.setSexo(listado.get(i).getSexo());
+                                Filtrado.add(per);
+                            }
+
+                        }
+                        FiltroEdad();
+                    }break;
+                    case 4:{//menor o igual a
+                        Filtrado.clear();
+                        for (int i=0;i<listado.size();i++){
+                            String edad=String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
+                            int edad1=Integer.valueOf(edad);
+                            if (edad1<=Integer.valueOf(txtParametro.getText())){
+                                Personal per=new Personal();
+                                per.setCodigo(listado.get(i).getCodigo());
+                                per.setNombre(listado.get(i).getNombre());
+                                per.setApellidoPaterno(listado.get(i).getApellidoPaterno());
+                                per.setApellidoMaterno(listado.get(i).getApellidoMaterno());
+                                per.setTelefono(listado.get(i).getTelefono());
+                                per.setFechaNacimiento(listado.get(i).getFechaNacimiento());
+                                per.setSexo(listado.get(i).getSexo());
+                                Filtrado.add(per);
+                            }
+
+                        }
+                        FiltroEdad();
+                    }break;
+                    case 5:{//entre
+                        Filtrado.clear();
+                        for (int i=0;i<listado.size();i++){
+                            String edad=String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
+                            int edad1=Integer.valueOf(edad);
+                            if ((edad1>=Integer.valueOf(txtParametro.getText()))&&edad1<=Integer.valueOf(txtParametro2.getText())){
+                                Personal per=new Personal();
+                                per.setCodigo(listado.get(i).getCodigo());
+                                per.setNombre(listado.get(i).getNombre());
+                                per.setApellidoPaterno(listado.get(i).getApellidoPaterno());
+                                per.setApellidoMaterno(listado.get(i).getApellidoMaterno());
+                                per.setTelefono(listado.get(i).getTelefono());
+                                per.setFechaNacimiento(listado.get(i).getFechaNacimiento());
+                                per.setSexo(listado.get(i).getSexo());
+                                Filtrado.add(per);
+                            }
+
+                        }
+                        FiltroEdad();
                     }break;
                 }
+
+            }
+        });
+        btnEliminarFiltros.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Actualizar();
             }
         });
     }
@@ -177,6 +292,18 @@ public class FormularioClasico {
 
         listado.add(new Personal(String.valueOf(new Random().nextInt()), "Karla Michelle", "Rivera", "Aleman", 70079032,LocalDate.of(1980,8,12),'F'));
         listado.add(new Personal(String.valueOf(new Random().nextInt()), "Ronald Gabriel", "Ramos", "Gutierres", 78787878,LocalDate.of(1975,6,15),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Rene Josias", "Quijada", "Rosales", 75487845,LocalDate.of(1975,1,15),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "German Jesus", "Valle", "Arrue", 70451245,LocalDate.of(1971,2,15),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Emerson David", "Duarte", "Guillen", 79621545,LocalDate.of(1972,3,8),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Antony Jacobo", "Valle", "Gomez", 70215487,LocalDate.of(1973,4,15),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Josselyn Adele", "Arrue", "Gutierres", 79564512,LocalDate.of(1974,5,5),'F'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Andrea Nicole", "Cabanias", "Menjivar", 70707070,LocalDate.of(1975,6,15),'F'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Reina Carolina", "Serrano", "Luna", 71717171,LocalDate.of(1976,7,2),'F'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Gabriela Angela", "Alvarenga", "Alas", 75757575,LocalDate.of(1977,8,1),'F'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Melvin Otoniel", "Recinos", "Oliva", 74747474,LocalDate.of(1978,9,15),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Freddy Pastor", "Lopez", "Cartagena", 72757848,LocalDate.of(1979,10,20),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Jose Rosalio", "Serrano", "Gutierres", 78888888,LocalDate.of(1980,11,15),'M'));
+        listado.add(new Personal(String.valueOf(new Random().nextInt()), "Nelson Romeo", "Hercules", "Orellana", 71234567,LocalDate.of(1976,12,31),'M'));
         Actualizar();
 
     }
@@ -225,8 +352,9 @@ public class FormularioClasico {
                 t+=p;
 
         }
-            double prom=Math.round(t/tblPersonal.getRowCount());
-            lblEdadPromedio.setText(String.valueOf(prom));
+            BigDecimal bd = new BigDecimal(t/tblPersonal.getRowCount());
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            lblEdadPromedio.setText(String.valueOf(bd));
     }
     }
     private void limpiarcomponentes(){
