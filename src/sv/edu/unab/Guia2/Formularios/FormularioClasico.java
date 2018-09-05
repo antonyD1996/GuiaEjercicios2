@@ -44,6 +44,9 @@ public class FormularioClasico {
     private JButton btnFiltroSexo;
     private JButton btnEliminarFiltros;
     private JComboBox cboxFiltroSexo;
+    private JButton btnCancelar;
+    private JLabel lblMayor;
+    private JLabel lblMenor;
 
     ArrayList<Personal> listado=new ArrayList<>();
     ArrayList<Personal> Filtrado=new ArrayList();
@@ -101,7 +104,7 @@ public class FormularioClasico {
                 p.setFechaNacimiento(LocalDate.parse(ftxFechaNacimiento.getText(),dtf));
                 p.setSexo(cboxSexo.getSelectedItem().toString().charAt(0));
                 listado.add(p);
-                Actualizar();
+                Actualizar(listado);
                 limpiarcomponentes();
             }
         });
@@ -141,7 +144,7 @@ public class FormularioClasico {
                         listado.get(i).setSexo(cboxSexo.getSelectedItem().toString().charAt(0));
                     }
                 }
-                Actualizar();
+                Actualizar(listado);
                 limpiarcomponentes();
             }
         });
@@ -152,7 +155,8 @@ public class FormularioClasico {
                     if(Codigo==listado.get(i).getCodigo()){
                         listado.remove(i);
                     }
-                    Actualizar();
+                    Actualizar(listado);
+                    limpiarcomponentes();
                 }
             }
         });
@@ -179,7 +183,7 @@ public class FormularioClasico {
 
                             }
                         }
-                        FiltroEdad();
+                        Actualizar(Filtrado);
                     }break;
                     case 1:{//mayor a
                         Filtrado.clear();
@@ -199,7 +203,7 @@ public class FormularioClasico {
                             }
 
                         }
-                        FiltroEdad();
+                        Actualizar(Filtrado);
                     }break;
                     case 2:{//mayor o igual a
                         Filtrado.clear();
@@ -219,7 +223,7 @@ public class FormularioClasico {
                             }
 
                         }
-                        FiltroEdad();
+                        Actualizar(Filtrado);
                     }break;
                     case 3:{//menor a
                         Filtrado.clear();
@@ -239,7 +243,7 @@ public class FormularioClasico {
                             }
 
                         }
-                        FiltroEdad();
+                        Actualizar(Filtrado);
                     }break;
                     case 4:{//menor o igual a
                         Filtrado.clear();
@@ -259,7 +263,7 @@ public class FormularioClasico {
                             }
 
                         }
-                        FiltroEdad();
+                        Actualizar(Filtrado);
                     }break;
                     case 5:{//entre
                         Filtrado.clear();
@@ -279,7 +283,7 @@ public class FormularioClasico {
                             }
 
                         }
-                        FiltroEdad();
+                        Actualizar(Filtrado);
                     }break;
                 }
 
@@ -288,12 +292,41 @@ public class FormularioClasico {
         btnEliminarFiltros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Actualizar();
+                Actualizar(listado);
             }
         });
         btnFiltroSexo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            }
+        });
+        btnBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String parametroNombre=txtNombre.getText();
+                Filtrado.clear();
+                for (int i=0;i<listado.size();i++){
+                    if (parametroNombre.equals(listado.get(i).getNombre())){
+                        Personal per=new Personal();
+                        per.setCodigo(listado.get(i).getCodigo());
+                        per.setNombre(listado.get(i).getNombre());
+                        per.setApellidoPaterno(listado.get(i).getApellidoPaterno());
+                        per.setApellidoMaterno(listado.get(i).getApellidoMaterno());
+                        per.setTelefono(listado.get(i).getTelefono());
+                        per.setFechaNacimiento(listado.get(i).getFechaNacimiento());
+                        per.setSexo(listado.get(i).getSexo());
+                        Filtrado.add(per);
+                    }
+                }
+                Actualizar(Filtrado);
+
+            }
+
+        });
+        btnCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiarcomponentes();
             }
         });
     }
@@ -313,10 +346,10 @@ public class FormularioClasico {
         listado.add(new Personal(String.valueOf(new Random().nextInt()), "Freddy Pastor", "Lopez", "Cartagena", 72757848,LocalDate.of(1979,10,20),'M'));
         listado.add(new Personal(String.valueOf(new Random().nextInt()), "Jose Rosalio", "Serrano", "Gutierres", 78888888,LocalDate.of(1980,11,15),'M'));
         listado.add(new Personal(String.valueOf(new Random().nextInt()), "Nelson Romeo", "Hercules", "Orellana", 71234567,LocalDate.of(1976,12,31),'M'));
-        Actualizar();
+        Actualizar(listado);
 
     }
-    public void Actualizar(){
+    public void Actualizar(ArrayList<Personal> listado){
         String matriz[][] = new String[listado.size()][8];
         for(int i = 0; i<listado.size(); i++){
             matriz[i][0]= listado.get(i).getCodigo();
@@ -334,36 +367,33 @@ public class FormularioClasico {
         EdadPromedio();
 
     }
-    public void FiltroEdad(){
-        String matriz[][] = new String[Filtrado.size()][8];
-        for(int i = 0; i<Filtrado.size(); i++){
-            matriz[i][0]= Filtrado.get(i).getCodigo();
-            matriz[i][1]= Filtrado.get(i).getNombre();
-            matriz[i][2]= Filtrado.get(i).getApellidoPaterno();
-            matriz[i][3]= Filtrado.get(i).getApellidoMaterno();
-            matriz[i][4]= Integer.toString(Filtrado.get(i).getTelefono());
-            matriz[i][5]= String.valueOf(Filtrado.get(i).getFechaNacimiento());
-            matriz[i][6] = String.valueOf(Filtrado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
-            matriz[i][7]= String.valueOf(Filtrado.get(i).getSexo().toString().charAt(0));
-        }
-        tblPersonal.setModel(new javax.swing.table.DefaultTableModel(matriz, new String[]
-                {"Codigo","Nombre","Apellido P","Apellido M","Telefono","FechaN","Edad","Sexo"}));
-
-        EdadPromedio();
-
-    }
     private void EdadPromedio(){
         double t=0;
         double p=0;
+        double valor=0;
+        int indice=0;
         if (tblPersonal.getRowCount()>0){
             for (int i=0;i<tblPersonal.getRowCount();i++){
                 p=Double.parseDouble(tblPersonal.getValueAt(i,6).toString());
                 t+=p;
+                if (p>valor){
+                    valor=p;
+                    lblMayor.setText(tblPersonal.getValueAt(i,2).toString()+" "+tblPersonal.getValueAt(i,3).toString() +", "+tblPersonal.getValueAt(i,1).toString());
+                }
+                if (p<valor){
+                    valor=p;
+                    lblMenor.setText(tblPersonal.getValueAt(i,2).toString()+" "+tblPersonal.getValueAt(i,3).toString() +", "+tblPersonal.getValueAt(i,1).toString());
+                }
+
 
         }
             BigDecimal bd = new BigDecimal(t/tblPersonal.getRowCount());
             bd = bd.setScale(2, RoundingMode.HALF_UP);
             lblEdadPromedio.setText(String.valueOf(bd));
+
+            for(int i=0;i<tblPersonal.getRowCount();i++){
+
+            }
     }
     }
     private void limpiarcomponentes(){
@@ -371,6 +401,7 @@ public class FormularioClasico {
         txtApellidoPaterno.setText(null);
         txtApellidoMaterno.setText(null);
         ftxFechaNacimiento.setText(null);
+        txtTelefono.setText(null);
         cboxSexo.setSelectedItem(0);
     }
 
