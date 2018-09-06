@@ -3,12 +3,14 @@ package sv.edu.unab.Guia2.Formularios;
 import sv.edu.unab.Guia2.Dominio.Personal;
 
 import javax.swing.*;
+import javax.swing.table.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -57,12 +59,6 @@ public class FormularioStreamAPI {
 
 
     public FormularioStreamAPI() {
-        txtNombre.setText("Antony David");
-        txtApellidoPaterno.setText("Duarte");
-        txtApellidoMaterno.setText("Perlera");
-        txtTelefono.setText("70079032");
-        ftxFechaNacimiento.setValue("05/11/1996");
-        cboxSexo.setSelectedItem(0);
         initcomponents();
     }
     public void initcomponents(){
@@ -71,6 +67,7 @@ public class FormularioStreamAPI {
         if (listadoModel==null){
             listadoModel=new ArrayList<>();
         }
+
         listadoModel.add(new Personal(String.valueOf(new Random().nextInt()), "Karla Michelle", "Rivera", "Aleman", 70079032, LocalDate.of(1980,8,12),'F'));
         listadoModel.add(new Personal(String.valueOf(new Random().nextInt()), "Ronald Gabriel", "Ramos", "Gutierres", 78787878,LocalDate.of(1975,6,15),'M'));
         listadoModel.add(new Personal(String.valueOf(new Random().nextInt()), "Rene Josias", "Quijada", "Rosales", 75487845,LocalDate.of(1975,1,15),'M'));
@@ -126,6 +123,19 @@ public class FormularioStreamAPI {
         btnEliminar.addActionListener(e->{
         listadoModel.removeIf(p->p.getCodigo().equals(Codigo));
         ActualizarDatos(listadoModel);
+        });
+        btnBuscar.addActionListener(e->{
+            List<Personal> busqueda=listadoModel.stream().filter(m->{
+                boolean respuesta=false;
+                if (m.getNombre().equals(txtNombre.getText())){
+                    respuesta=true;
+                }
+                return  respuesta;
+            }).collect(Collectors.toList());
+            ActualizarDatos(busqueda);
+        });
+        btnEliminarFiltros.addActionListener(e->{
+            ActualizarDatos(listadoModel);
         });
         btnAplicarFiltro.addActionListener(e->{
             switch (cboxFiltros.getSelectedIndex()){
@@ -240,9 +250,8 @@ public class FormularioStreamAPI {
                     return new BigDecimal(edad);
                 })
                 .reduce((e1,e2)->(e1.add(e2).divide(new BigDecimal(2)))).get();
-        edadPromedio.setScale(2,BigDecimal.ROUND_HALF_UP);
-
-        lblEdadPromedio.setText(edadPromedio.toString());
+        BigDecimal bd=edadPromedio.setScale(2,RoundingMode.HALF_UP);
+        lblEdadPromedio.setText(bd.setScale(2,RoundingMode.HALF_UP).toString());
 
         DefaultTableModel modelo=new DefaultTableModel();
         modelo.addColumn("Codigo");
@@ -277,6 +286,4 @@ public class FormularioStreamAPI {
         txtTelefono.setText(null);
         cboxSexo.setSelectedItem(0);
     }
-
-
 }
