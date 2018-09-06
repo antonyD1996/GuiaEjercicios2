@@ -85,7 +85,7 @@ public class FormularioClasico {
                 ApellidoPaterno=(tblPersonal.getValueAt(i,2).toString());
                 ApellidoMaterno=(tblPersonal.getValueAt(i,3).toString());
                 Telefono=Integer.parseInt(tblPersonal.getValueAt(i,4).toString());
-                FechaNacimiento=LocalDate.parse(tblPersonal.getValueAt(i,5).toString());
+                FechaNacimiento=LocalDate.parse(tblPersonal.getValueAt(i,5).toString(),dtf);
                 Sexo=(tblPersonal.getValueAt(i,7).toString().charAt(0));
 
             }
@@ -357,7 +357,7 @@ public class FormularioClasico {
             matriz[i][2]= listado.get(i).getApellidoPaterno();
             matriz[i][3]= listado.get(i).getApellidoMaterno();
             matriz[i][4]= Integer.toString(listado.get(i).getTelefono());
-            matriz[i][5]= String.valueOf(listado.get(i).getFechaNacimiento());
+            matriz[i][5]= String.valueOf(listado.get(i).getFechaNacimiento().format(dtf));
             matriz[i][6] = String.valueOf(listado.get(i).getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS));
             matriz[i][7]= String.valueOf(listado.get(i).getSexo().toString().charAt(0));
         }
