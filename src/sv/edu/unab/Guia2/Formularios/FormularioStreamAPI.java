@@ -82,7 +82,7 @@ public class FormularioStreamAPI {
         listadoModel.add(new Personal(String.valueOf(new Random().nextInt()), "Freddy Pastor", "Lopez", "Cartagena", 72757848,LocalDate.of(1979,10,20),'M'));
         listadoModel.add(new Personal(String.valueOf(new Random().nextInt()), "Jose Rosalio", "Serrano", "Gutierres", 78888888,LocalDate.of(1980,11,15),'M'));
         listadoModel.add(new Personal(String.valueOf(new Random().nextInt()), "Nelson Romeo", "Hercules", "Orellana", 71234567,LocalDate.of(1976,12,31),'M'));
-        ActualizarDatos(listadoModel);
+        actualizarDatos(listadoModel);
 
         btnAgregar.addActionListener(e->{
             Personal p=new Personal();
@@ -94,8 +94,8 @@ public class FormularioStreamAPI {
             p.setFechaNacimiento(LocalDate.parse(ftxFechaNacimiento.getText(),dtf));
             p.setSexo(cboxSexo.getSelectedItem().toString().toUpperCase().charAt(0));
             listadoModel.add(p);
-            ActualizarDatos(listadoModel);
-            Limpiar();
+            actualizarDatos(listadoModel);
+            limpiar();
         });
         btnEditar.addActionListener(e->{
             txtNombre.setText(Nombre);
@@ -103,6 +103,12 @@ public class FormularioStreamAPI {
             txtApellidoMaterno.setText(ApellidoMaterno);
             txtTelefono.setText(String.valueOf(Telefono));
             ftxFechaNacimiento.setText(FechaNacimiento.format(dtf));
+            if (Sexo=='F'){
+                cboxSexo.setSelectedIndex(1);
+            }
+            else if(Sexo=='M'){
+                cboxSexo.setSelectedIndex(0);
+            }
 
         });
         btnGuardar.addActionListener(e->{
@@ -116,13 +122,13 @@ public class FormularioStreamAPI {
                     p.setFechaNacimiento(LocalDate.parse(ftxFechaNacimiento.getText(),dtf));
                     p.setSexo(cboxSexo.getSelectedItem().toString().charAt(0));
                 }
-                Limpiar();
-                ActualizarDatos(listadoModel);
+                limpiar();
+                actualizarDatos(listadoModel);
             });
         });
         btnEliminar.addActionListener(e->{
         listadoModel.removeIf(p->p.getCodigo().equals(Codigo));
-        ActualizarDatos(listadoModel);
+        actualizarDatos(listadoModel);
         });
         btnBuscar.addActionListener(e->{
             List<Personal> busqueda=listadoModel.stream().filter(m->{
@@ -132,10 +138,10 @@ public class FormularioStreamAPI {
                 }
                 return  respuesta;
             }).collect(Collectors.toList());
-            ActualizarDatos(busqueda);
+            actualizarDatos(busqueda);
         });
         btnEliminarFiltros.addActionListener(e->{
-            ActualizarDatos(listadoModel);
+            actualizarDatos(listadoModel);
         });
         btnAplicarFiltro.addActionListener(e->{
             switch (cboxFiltros.getSelectedIndex()){
@@ -148,7 +154,7 @@ public class FormularioStreamAPI {
                        }
                        return  respuesta;
                    }).collect(Collectors.toList());
-                   ActualizarDatos(igual);
+                   actualizarDatos(igual);
                 }break;
                 case 1:{//mayor a
                     List<Personal> mayorA=listadoModel.stream().filter(m->{
@@ -159,7 +165,7 @@ public class FormularioStreamAPI {
                         }
                         return  respuesta;
                     }).collect(Collectors.toList());
-                    ActualizarDatos(mayorA);
+                    actualizarDatos(mayorA);
                 }break;
                 case 2:{//mayor o igual a
                     List<Personal> mayorIgualA=listadoModel.stream().filter(m->{
@@ -170,7 +176,7 @@ public class FormularioStreamAPI {
                         }
                         return  respuesta;
                     }).collect(Collectors.toList());
-                    ActualizarDatos(mayorIgualA);
+                    actualizarDatos(mayorIgualA);
                 }break;
                 case 3:{//menor a
                     List<Personal> menorA=listadoModel.stream().filter(m->{
@@ -181,7 +187,7 @@ public class FormularioStreamAPI {
                         }
                         return  respuesta;
                     }).collect(Collectors.toList());
-                    ActualizarDatos(menorA);
+                    actualizarDatos(menorA);
                 }break;
                 case 4:{//menor o igual a
                     List<Personal> menorIgualA=listadoModel.stream().filter(m->{
@@ -192,7 +198,7 @@ public class FormularioStreamAPI {
                     }
                     return  respuesta;
                 }).collect(Collectors.toList());
-                ActualizarDatos(menorIgualA);
+                actualizarDatos(menorIgualA);
                 }break;
                 case 5:{//entre
                     List<Personal> menorA=listadoModel.stream().filter(m->{
@@ -203,7 +209,7 @@ public class FormularioStreamAPI {
                         }
                         return  respuesta;
                     }).collect(Collectors.toList());
-                    ActualizarDatos(menorA);
+                    actualizarDatos(menorA);
                 }break;
             }
         });
@@ -217,7 +223,6 @@ public class FormularioStreamAPI {
                 Telefono=Integer.parseInt(tblPersonal.getValueAt(i,4).toString());
                 FechaNacimiento=LocalDate.parse(tblPersonal.getValueAt(i,5).toString(),dtf);
                 Sexo=(tblPersonal.getValueAt(i,7).toString().charAt(0));
-
             }
         });
 
@@ -230,7 +235,7 @@ public class FormularioStreamAPI {
         }
 
     }
-    private void ActualizarDatos(List<Personal> listado){
+    private void actualizarDatos(List<Personal> listado){
         Personal edadMenor=listado.stream().min((e1,e2)->{
             Long edad1=e1.getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS);
             Long edad2=e2.getFechaNacimiento().until(LocalDate.now(),ChronoUnit.YEARS);
@@ -278,7 +283,7 @@ public class FormularioStreamAPI {
         });
         tblPersonal.setModel(modelo);
     }
-    private void Limpiar(){
+    private void limpiar(){
         txtNombre.setText(null);
         txtApellidoPaterno.setText(null);
         txtApellidoMaterno.setText(null);
